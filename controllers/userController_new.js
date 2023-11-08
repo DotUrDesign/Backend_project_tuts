@@ -66,7 +66,7 @@ module.exports.updateUser = async function updateUser(req, res){
                 message: "User not found"
             })
         }
-    } catch (error) {
+    } catch (error) { 
         console.log(error.message);
     }
 }

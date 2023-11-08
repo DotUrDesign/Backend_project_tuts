@@ -1,8 +1,7 @@
 const express = require('express');
 const userRouter = express.Router();
-const protectRoute = require('./authHelper.js');
-const {getUser, updateUser,deleteUser, getAllUsers} = require('../controllers/userController.js');
-
+const {getUser, updateUser,deleteUser, getAllUsers} = require('../controllers/userController_new.js');
+const {signup, login, isAuthorized, protectRoute} = require('../controllers/authController_new.js');
 
 // options for the user => update, delete
 userRouter
@@ -10,15 +9,26 @@ userRouter
 .patch(updateUser)
 .delete(deleteUser);
 
+userRouter
+.route('/signup')
+.post(signup);
+
+userRouter
+.route('/login')
+.post(login);
+
 // profile page
-app.use(protectRoute);
+userRouter.use(protectRoute);
 userRouter
 .route('/userProfile')
 .get(getUser);
 
 // get all user information -> only possible for the admin.
-app.use(isAuthourized(['admin']));  // is the loggedIn user is admin.
+userRouter.use(isAuthorized(['admin']));  // is the loggedIn user is admin.
 userRouter
-.route('')
+.route('/')
 .get(getAllUsers);
+
+module.exports = userRouter;
+
 

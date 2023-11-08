@@ -1,0 +1,1 @@
+const JWT_KEY = 'duchdaoifuc2382e273jhsbdcku';
