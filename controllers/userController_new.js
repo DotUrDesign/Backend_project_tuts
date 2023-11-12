@@ -2,7 +2,8 @@ const userModel = require('../models/userModel.js');
 
 // getUser
 module.exports.getUser = async function getUser(req, res){
-    let id = req.params.id;
+    let id = req.id;
+    // console.log(id);
     let userInfo = await userModel.findById(id);
     try {
         if(userInfo)
@@ -41,9 +42,16 @@ module.exports.getAllUsers = async function getAllUsers(req, res){
 // updateUser
 module.exports.updateUser = async function updateUser(req, res){
     try {
+        /*
+        -> Use req.body for data sent in the request body (e.g., in POST or PUT requests).
+        -> Use req.params for route parameters (like :id in the URL).
+        -> Use req.query for query parameters (e.g., ?key=value in the URL).
+         */
         let id = req.params.id;
         let user = await userModel.findById(id);
+        console.log(user);
         let dataToBeUpdated = req.body;
+        console.log(dataToBeUpdated);
         if(user)
         {
             let keys = [];
@@ -51,10 +59,14 @@ module.exports.updateUser = async function updateUser(req, res){
             for(let key in dataToBeUpdated)
                 keys.push(key);
 
+            console.log(keys);
+
             for(let i=0;i<keys.length;i++)
                 user[keys[i]] = dataToBeUpdated[keys[i]];
 
+            // console.log(user);
             let updatedData = await user.save();  // saving into the db.
+            // console.log(updatedData);
             res.json({
                 message: "User Info has been updated",
                 userInfo: updatedData

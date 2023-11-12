@@ -1,7 +1,9 @@
 const express = require('express');
 const userRouter = express.Router();
 const {getUser, updateUser,deleteUser, getAllUsers} = require('../controllers/userController_new.js');
-const {signup, login, isAuthorized, protectRoute} = require('../controllers/authController_new.js');
+const {signup, login, isAuthorized, protectRoute, forgetPassword, resetPassword, logout} = require('../controllers/authController_new.js');
+const cookieParser = require('cookie-parser');
+userRouter.use(cookieParser());
 
 // options for the user => update, delete
 userRouter
@@ -16,6 +18,18 @@ userRouter
 userRouter
 .route('/login')
 .post(login);
+
+userRouter
+.route('/forgetPassword')
+.post(forgetPassword);
+
+userRouter
+.route('/resetPassword/:token')
+.post(resetPassword);
+
+userRouter
+.route('/logout')
+.get(logout);
 
 // profile page
 userRouter.use(protectRoute);

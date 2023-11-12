@@ -1,7 +1,7 @@
 const emailValidator = require('email-validator');
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
-
+const crypto = require('crypto');
 
 const db_link = 'mongodb+srv://Prats:Prats123@cluster0.iy4gzd4.mongodb.net/?retryWrites=true&w=majority';
 mongoose.connect(db_link)
@@ -31,14 +31,14 @@ const userSchema = mongoose.Schema({
         required: true,
         minLength: 8
     },
-    confirmPassword: {
-        type: String, 
-        required: true,
-        minLength: 8,
-        validate: function(){
-            return this.confirmPassword == this.password;
-        }
-    },
+    // confirmPassword: {
+    //     type: String, 
+    //     required: true,
+    //     minLength: 8,
+    //     validate: function(){
+    //         return this.confirmPassword == this.password;
+    //     }
+    // },
     role: {
         type : String,
         enum: ['admin', 'user', 'restaurantowner', 'deliveryboy'],
@@ -47,7 +47,8 @@ const userSchema = mongoose.Schema({
     profileImage: {
         type: String,
         dafault: 'img/users/default.jpeg'
-    }
+    },
+    resetToken: String
 });
 
 /*
@@ -65,9 +66,9 @@ userSchema.post('save', function(doc) {
 */
 
 // I dont want to save the confirmPassword attribute into the database. Preventing data-redundancy
-userSchema.pre('save', function(){
-    this.confirmPassword = undefined;
-})
+// userSchema.pre('save', function(){
+//     this.confirmPassword = undefined;
+// })
 
 // Before the password is saved into the db, we have to hash the password.
 // userSchema.pre('save', async function(){
@@ -77,10 +78,23 @@ userSchema.pre('save', function(){
 //     this.password = hashedString;
 // });
 
+// userSchema.methods
+userSchema.methods.createResetToken = function(){
+    // generate unique token by using crypto(npm package)
+    let resetToken = crypto.randomBytes(32).toString("hex");  // generating a 32 bit token in hexadecimal form
+    this.resetToken = resetToken;  // to reset the password, the userModel.find will first search for the user, then it will update its password. And, that's the reason why it's important to save the resetToken in the userModel.
+    return resetToken;
+}
+
+userSchema.methods.resetPasswordHandler = function(password, confirmPassword){
+    this.password = password;
+    this.confirmPassword = confirmPassword;
+    this.resetToken = undefined;
+}
+
 // model
 const userModel = mongoose.model('userModel', userSchema);
 module.exports = userModel;
-
 /*
 
 // immediate invoking function - no need to call this function 
