@@ -1,7 +1,7 @@
 const express = require('express');
 const userModel = require('../models/userModel.js');
 const jwt = require('jsonwebtoken');
-const JWT_KEY = require('../secrets.js');
+const {JWT_KEY} = require('../secrets.js');
 
 module.exports.signup = async function signup(req, res){
     try {
@@ -126,7 +126,7 @@ module.exports.forgetPassword = async function forgetPassword(req, res){
         if(user)
         {
             // createResetToken - function to create a new token - yet to built
-            const resetToken = user.createResetToken();
+            const resetToken = user.createResetToken();  // UserSchema method
             /* http://abc.com/resetPassword/resetToken 
                 To maintain a unique link to reset password and sending it to the user to their mail, we actually append the unique token at the end of the link.
             */
@@ -155,7 +155,7 @@ module.exports.resetPassword = async function resetPassword(req, res){
         let user = await userModel.findOne({resetToken: token});
         if(user)
         {   
-            // resetPasswordHandler - checks if password == confirmPassword - yet to built
+            // resetPasswordHandler - yet to built
             user.resetPasswordhandler(password, confirmPassword);
             await user.save();
             res.json({

@@ -2,12 +2,12 @@ const emailValidator = require('email-validator');
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
+const {DB_LINK} = require('../secrets.js');
 
-const db_link = 'mongodb+srv://Prats:Prats123@cluster0.iy4gzd4.mongodb.net/?retryWrites=true&w=majority';
-mongoose.connect(db_link)
+mongoose.connect(DB_LINK)
 .then(function(db){
     // console.log(db);
-    console.log('db connected');
+    console.log('user db connected');
 })
 .catch(function(err){
     console.log(err);
@@ -82,7 +82,7 @@ userSchema.post('save', function(doc) {
 userSchema.methods.createResetToken = function(){
     // generate unique token by using crypto(npm package)
     let resetToken = crypto.randomBytes(32).toString("hex");  // generating a 32 bit token in hexadecimal form
-    this.resetToken = resetToken;  // to reset the password, the userModel.find will first search for the user, then it will update its password. And, that's the reason why it's important to save the resetToken in the userModel.
+    this.resetToken = resetToken;  // to reset the password, the userModel.find will first search for the user, then it will update its password. And, that's the reason why it's important to save the resetToken in the userModel. See the resetPassword function, you will understand why this line is written.
     return resetToken;
 }
 
