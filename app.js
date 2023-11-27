@@ -6,6 +6,7 @@ const userRouter = require('./Routers/userRouter_new.js');
 const planModel = require('./models/planModel.js');
 const planRouter = require('./Routers/planRouter.js');
 const cookieParser = require('cookie-parser');
+const reviewRouter = require('./Routers/reviewRouter.js');
 
 app.use(express.json());
 app.use(cookieParser());
@@ -21,6 +22,8 @@ app.listen(3000, () => {
 app.use('/user', userRouter);
 
 app.use('/plans', planRouter);
+
+app.use('/review', reviewRouter);
 
 
 

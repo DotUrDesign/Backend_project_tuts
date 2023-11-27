@@ -32,6 +32,10 @@ const planSchema = mongoose.Schema({
         validate: function(){
             return this.discount<100;
         }
+    },
+    noOfReviews: {
+        type : Number,
+        default: 0
     }
 });
 
