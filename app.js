@@ -7,6 +7,7 @@ const planModel = require('./models/planModel.js');
 const planRouter = require('./Routers/planRouter.js');
 const cookieParser = require('cookie-parser');
 const reviewRouter = require('./Routers/reviewRouter.js');
+const {checkoutSession} = require('./controllers/checkoutController.js');
 
 app.use(express.json());
 app.use(cookieParser());
@@ -24,6 +25,8 @@ app.use('/user', userRouter);
 app.use('/plans', planRouter);
 
 app.use('/review', reviewRouter);
+
+app.all('/create-checkout-session', checkoutSession);
 
 
 
