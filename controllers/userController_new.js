@@ -104,3 +104,9 @@ module.exports.deleteUser = async function deleteUser(req, res){
         console.log(error.message);
     }
 }
+
+module.exports.updateProfileImage = function updateProfileImage(req, res){
+    res.json({
+        message: "File uploaded successfully"
+    })
+}
